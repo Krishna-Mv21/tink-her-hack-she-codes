@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Smart Ambulance System</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+  background:#111;
+  color:white;
+}
+
+/* ---------- SCREENS ---------- */
+.screen{
+  display:none;
+  height:100vh;
+  padding:20px;
+}
+
+.active{
+  display:block;
+}
+
+/* ---------- NAV BAR ---------- */
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#1a1a1a;
+  padding:12px;
+  display:flex;
+  justify-content:space-around;
+}
+
+.nav button{
+  background:#333;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* =====================================================
+   SCREEN 1 – MAIN DRIVER DASHBOARD
+===================================================== */
+#screen1{
+  background:white;
+  color:black;
+  text-align:center;
+  font-weight:bold;
+}
+
+.header{
+  font-size:26px;
+  margin-bottom:10px;
+}
+
+/* map placeholder */
+.map{
+  height:45%;
+  border-radius:16px;
+  background:linear-gradient(45deg,#ddd,#bbb);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:20px;
+  box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
+
+/* ETA panel */
+.stats{
+  display:flex;
+  justify-content:space-around;
+  font-size:20px;
+  margin-bottom:25px;
+}
+
+.green{ color:#00b300; }
+.orange{ color:#ff9900; }
+
+/* BIG SOS BUTTON */
+.sos{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#ff0000;
+  color:white;
+  font-size:38px;
+  font-weight:bold;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 0 30px red;
+  animation:pulse 1.2s infinite;
+}
+
+/* glowing pulse */
+@keyframes pulse{
+  0%{box-shadow:0 0 15px red;}
+  50%{box-shadow:0 0 50px red;}
+  100%{box-shadow:0 0 15px red;}
+}
+
+/* =====================================================
+   SCREEN 2 – HOSPITAL LIST
+===================================================== */
+#screen2{
+  background:linear-gradient(135deg,#0077ff,#003366);
+}
+
+.card{
+  background:white;
+  color:black;
+  padding:15px;
+  border-radius:12px;
+  margin:12px 0;
+  font-weight:bold;
+}
+
+/* =====================================================
+   SCREEN 3 – EMERGENCY PANEL
+===================================================== */
+#screen3{
+  background:linear-gradient(135deg,#ff4d4d,#b30000);
+  text-align:center;
+}
+
+.bigbtn{
+  width:85%;
+  padding:18px;
+  font-size:20px;
+  margin:15px;
+  border:none;
+  border-radius:12px;
+  background:black;
+  color:white;
+  cursor:pointer;
+}
+
+/* =====================================================
+   SCREEN 4 – ROUTES
+===================================================== */
+#screen4{
+  background:linear-gradient(135deg,#00c853,#00695c);
+}
+
+.route{
+  background:white;
+  color:black;
+  padding:18px;
+  border-radius:12px;
+  margin:12px 0;
+  font-size:18px;
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- ================= SCREEN 1 ================= -->
+<div id="screen1" class="screen active">
+
+  <div class="header">🚑 LIVE NAVIGATION</div>
+
+  <div class="map">🗺️ MAP VIEW</div>
+
+  <div class="stats">
+    <div class="green">ETA: <span id="time">8</span> min</div>
+    <div class="orange">Distance: <span id="dist">4.5</span> km</div>
+  </div>
+
+  <!-- HUGE CENTER SOS -->
+  <button class="sos" onclick="go(3)">SOS</button>
+
+</div>
+
+
+<!-- ================= SCREEN 2 ================= -->
+<div id="screen2" class="screen">
+  <h2>🏥 Nearby Hospitals</h2>
+
+  <div class="card">City Hospital – 5 min – Beds 3</div>
+  <div class="card">Apollo Care – 7 min – ICU 2</div>
+  <div class="card">Metro ER – Full</div>
+</div>
+
+
+<!-- ================= SCREEN 3 ================= -->
+<div id="screen3" class="screen">
+  <h2>🚨 EMERGENCY CONTROLS</h2>
+
+  <button class="bigbtn">Send SOS to Police</button>
+  <button class="bigbtn">Clear Traffic Signals</button>
+  <button class="bigbtn">Open Railway Gate</button>
+
+  <h3>Status: Authorities Notified</h3>
+</div>
+
+
+<!-- ================= SCREEN 4 ================= -->
+<div id="screen4" class="screen">
+  <h2>🛣️ Route Options</h2>
+
+  <div class="route">🟢 Fastest – 5 min</div>
+  <div class="route">🟡 Medium – 8 min</div>
+  <div class="route">🔴 Safe – 10 min</div>
+</div>
+
+
+<!-- ================= NAVIGATION ================= -->
+<div class="nav">
+  <button onclick="go(1)">Home</button>
+  <button onclick="go(2)">Hospitals</button>
+  <button onclick="go(3)">SOS</button>
+  <button onclick="go(4)">Routes</button>
+</div>
+
+
+
+<script>
+function go(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen'+n).classList.add('active');
+}
+
+/* Live ETA simulation */
+let t=8;
+let d=4.5;
+
+setInterval(()=>{
+  if(t>1) t-=0.1;
+  if(d>0.2) d-=0.05;
+
+  document.getElementById('time').innerText=t.toFixed(1);
+  document.getElementById('dist').innerText=d.toFixed(2);
+},1000);
+</script>
+
+</body>
+</html>

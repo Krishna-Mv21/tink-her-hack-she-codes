@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Ambulance System</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background:#f2f2f2;
+    }
+
+    .screen{
+      display:none;
+      height:100vh;
+      padding:20px;
+    }
+
+    .active{
+      display:block;
+    }
+
+    button{
+      padding:12px 20px;
+      font-size:18px;
+      margin:6px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    /* ============ SCREEN 1 (Driver Map) ============ */
+
+    #screen1{
+      background:white;
+      font-weight:bold;
+      text-align:center;
+    }
+
+    .map-box{
+      height:60%;
+      background:#e6e6e6;
+      border-radius:10px;
+      margin:15px 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+    }
+
+    .sos-btn{
+      background:red;
+      color:white;
+      font-size:28px;
+      padding:25px 50px;
+      border-radius:50px;
+    }
+
+    /* ============ SCREEN 2 (Hospitals) ============ */
+
+    .hospital{
+      background:white;
+      padding:15px;
+      margin:10px 0;
+      border-radius:8px;
+      box-shadow:0 0 5px gray;
+    }
+
+    /* ============ SCREEN 3 (SOS) ============ */
+
+    #screen3{
+      background:#ffe5e5;
+      text-align:center;
+    }
+
+    .big-btn{
+      width:80%;
+      background:#ff4d4d;
+      color:white;
+      font-size:20px;
+      display:block;
+      margin:15px auto;
+    }
+
+    /* ============ SCREEN 4 (Routes) ============ */
+
+    .route{
+      background:white;
+      padding:15px;
+      margin:10px 0;
+      border-left:6px solid green;
+    }
+
+    .nav-bar{
+      position:fixed;
+      bottom:0;
+      width:100%;
+      background:#333;
+      text-align:center;
+      padding:10px;
+    }
+
+    .nav-bar button{
+      background:white;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= SCREEN 1 ================= -->
+<div id="screen1" class="screen active">
+
+  <h1>AMBULANCE NAVIGATION</h1>
+
+  <div class="map-box">
+    🗺️ LIVE MAP AREA
+  </div>
+
+  <h2>ETA: <span id="time">10</span> min</h2>
+  <h2>Distance: <span id="distance">5.0</span> km</h2>
+
+  <button class="sos-btn" onclick="goScreen(3)">🚨 SOS</button>
+</div>
+
+
+<!-- ================= SCREEN 2 ================= -->
+<div id="screen2" class="screen">
+
+  <h2>Nearby Hospitals</h2>
+
+  <div class="hospital">City Hospital – 5 min – Beds 3</div>
+  <div class="hospital">Apollo Care – 7 min – Beds 2</div>
+  <div class="hospital">Metro ER – Full</div>
+
+</div>
+
+
+<!-- ================= SCREEN 3 ================= -->
+<div id="screen3" class="screen">
+
+  <h2>🚨 EMERGENCY CONTROLS</h2>
+
+  <button class="big-btn">Send SOS to Police</button>
+  <button class="big-btn">Clear Traffic Signals</button>
+  <button class="big-btn">Open Railway Gate</button>
+
+  <p>Status: Help on the way...</p>
+
+</div>
+
+
+<!-- ================= SCREEN 4 ================= -->
+<div id="screen4" class="screen">
+
+  <h2>Choose Route</h2>
+
+  <div class="route">Fastest – 5 min</div>
+  <div class="route" style="border-color:orange;">Traffic – 8 min</div>
+  <div class="route" style="border-color:red;">Safe – 10 min</div>
+
+</div>
+
+
+<!-- ================= NAVIGATION ================= -->
+<div class="nav-bar">
+  <button onclick="goScreen(1)">Home</button>
+  <button onclick="goScreen(2)">Hospitals</button>
+  <button onclick="goScreen(3)">SOS</button>
+  <button onclick="goScreen(4)">Routes</button>
+</div>
+
+
+
+<script>
+  /* Switch Screens */
+  function goScreen(num){
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById("screen"+num).classList.add("active");
+  }
+
+  /* Live ETA + Distance update (simulation) */
+  let time = 10;
+  let distance = 5.0;
+
+  setInterval(() => {
+    if(time > 1) time -= 0.1;
+    if(distance > 0.2) distance -= 0.05;
+
+    document.getElementById("time").innerText = time.toFixed(1);
+    document.getElementById("distance").innerText = distance.toFixed(2);
+  }, 1000);
+</script>
+
+</body>
+</html>
