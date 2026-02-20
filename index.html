@@ -105,9 +105,15 @@
       font-size:14px;
     }
   </style>
+  <link rel="stylesheet" href="dark-theme.css">
 </head>
 
 <body>
+
+  <div class="top-bar">
+    <div class="left"><span id="live-time">--:--:--</span></div>
+    <div class="right">Vehicle: <span id="vehicle-no">AMB-001</span></div>
+  </div>
 
 <!-- ================= SCREEN 1 ================= -->
 <div id="screen1" class="screen active">
@@ -121,7 +127,7 @@
   <h2>ETA: <span id="time">10</span> min</h2>
   <h2>Distance: <span id="distance">5.0</span> km</h2>
 
-  <button class="sos-btn" onclick="goScreen(3)">🚨 SOS</button>
+  <button class="sos-btn" onclick="goScreen(3)"><span class="sos-symbol">🚨</span> SOS</button>
 </div>
 
 
@@ -142,9 +148,10 @@
 
   <h2>🚨 EMERGENCY CONTROLS</h2>
 
-  <button class="big-btn">Send SOS to Police</button>
-  <button class="big-btn">Clear Traffic Signals</button>
-  <button class="big-btn">Open Railway Gate</button>
+  <button class="big-btn" onclick="triggerAction('POLICE')"><span class="sos-symbol">🚨</span> Send SOS to Police</button>
+  <button class="big-btn" onclick="triggerAction('TRAFFIC')">Traffic Police alert</button>
+  <button class="big-btn" onclick="toggleRailway(this)"><span class="lock-icon" data-locked="true">🔒</span><span class="railway-label">Railway Alert</span></button>
+  <button class="big-btn btn-ultra" onclick="triggerAction('ULTRA')">Ultra Emergency</button>
 
   <p>Status: Help on the way...</p>
 
@@ -191,6 +198,40 @@
     document.getElementById("time").innerText = time.toFixed(1);
     document.getElementById("distance").innerText = distance.toFixed(2);
   }, 1000);
+
+  /* Live clock + simple action handler */
+  function triggerAction(name){
+    console.log(name + ' triggered');
+    // placeholder: replace with real integration
+    alert(name + ' triggered');
+  }
+
+  function updateClock(){
+    const el = document.getElementById('live-time');
+    if(el) el.innerText = new Date().toLocaleTimeString();
+  }
+  setInterval(updateClock,1000);
+  updateClock();
+  // vehicle number can be updated dynamically if needed
+  document.getElementById('vehicle-no').innerText = 'AMB-001';
+
+  function toggleRailway(btn){
+    const icon = btn.querySelector('.lock-icon');
+    const locked = icon && icon.getAttribute('data-locked') === 'true';
+    if(locked){
+      // turn ON: show unlock
+      icon.innerText = '🔓';
+      icon.setAttribute('data-locked','false');
+      btn.classList.add('active-rail');
+      triggerAction('RAIL_ON');
+    } else {
+      // turn OFF: show lock
+      icon.innerText = '🔒';
+      icon.setAttribute('data-locked','true');
+      btn.classList.remove('active-rail');
+      triggerAction('RAIL_OFF');
+    }
+  }
 </script>
 
 </body>

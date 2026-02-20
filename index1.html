@@ -131,8 +131,14 @@
     .nav-btn.active-nav { color: var(--primary-red); font-weight: bold; }
     .nav-icon { font-size: 20px; display: block; margin-bottom: 4px; }
   </style>
+  <link rel="stylesheet" href="dark-theme.css">
 </head>
 <body>
+
+  <div class="top-bar">
+    <div class="left"><span id="live-time">--:--:--</span></div>
+    <div class="right">Vehicle: <span id="vehicle-no">AMB-001</span></div>
+  </div>
 
 <div id="screen1" class="screen active">
   <div class="map-box">
@@ -161,10 +167,36 @@
 <div id="screen3" class="screen">
   <h2>Emergency Override</h2>
   <div class="sos-grid">
-    <button class="big-btn btn-red" onclick="triggerAction('POLICE')">🚨 CALL POLICE</button>
-    <button class="big-btn btn-blue" onclick="triggerAction('TRAFFIC')">🚥 CLEAR TRAFFIC</button>
-    <button class="big-btn btn-orange" onclick="triggerAction('RAIL')">🛤️ RAILWAY GATE</button>
+    <button class="big-btn btn-red" onclick="triggerAction('POLICE')"><span class="sos-symbol">🚨</span> CALL POLICE</button>
+    <button class="big-btn btn-blue" onclick="triggerAction('TRAFFIC')">🚥 Traffic Police alert</button>
+    <button class="big-btn btn-orange" onclick="toggleRailway(this)"><span class="lock-icon" data-locked="true">🔒</span> 🛤️ <span class="railway-label">Railway Alert</span></button>
     <button class="big-btn btn-blue" onclick="triggerAction('HOSPITAL')">🏥 ALERT ER</button>
+    <button class="big-btn btn-ultra" onclick="triggerAction('ULTRA')"><span class="sos-symbol">🚨</span> ULTRA EMERGENCY</button>
   </div>
   <div id="status-feed">SYSTEM READY...</div>
 </div>
+
+<script>
+  function triggerAction(name){
+    console.log(name + ' triggered');
+    alert(name + ' triggered');
+  }
+
+  function updateClock(){
+    const el = document.getElementById('live-time');
+    if(el) el.innerText = new Date().toLocaleTimeString();
+  }
+  setInterval(updateClock,1000);
+  updateClock();
+  document.getElementById('vehicle-no').innerText = 'AMB-001';
+
+  function toggleRailway(btn){
+    const icon = btn.querySelector('.lock-icon');
+    const locked = icon && icon.getAttribute('data-locked') === 'true';
+    if(locked){
+      icon.innerText = '🔓'; icon.setAttribute('data-locked','false'); btn.classList.add('active-rail'); triggerAction('RAIL_ON');
+    } else { icon.innerText = '🔒'; icon.setAttribute('data-locked','true'); btn.classList.remove('active-rail'); triggerAction('RAIL_OFF'); }
+  }
+</script>
+</body>
+</html>

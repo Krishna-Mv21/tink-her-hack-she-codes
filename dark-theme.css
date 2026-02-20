@@ -1,0 +1,142 @@
+:root{
+  --bg:#070709;
+  --card:#0f1112;
+  --panel:#141617;
+  --muted:#9aa0a6;
+  --accent-red:#ff4d4d;
+  --accent-green:#00c853;
+  --accent-orange:#ffb74d;
+  --glass: rgba(255,255,255,0.02);
+  --glass-2: rgba(255,255,255,0.03);
+}
+
+/* Base */
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg) !important;
+  color:#e6eef3 !important;
+  font-family: inherit;
+}
+
+/* Make screens use dark panels */
+.screen{background:transparent !important}
+#screen1, #screen2, #screen3, #screen4{
+  background: linear-gradient(180deg,var(--panel), var(--card)) !important;
+  color: #e6eef3 !important;
+}
+
+/* Cards / list items */
+.card, .hospital, .hospital-card, .route, .map-box, .map, .stats-container, .card, .map{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important;
+  border: 1px solid rgba(255,255,255,0.03) !important;
+  color: #e6eef3 !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
+/* Buttons */
+button, .nav button, .bigbtn, .big-btn, .sos, .nav-btn{
+  background: linear-gradient(180deg, #1a1a1b, #121213) !important;
+  color: #f3f6f8 !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+/* Accent buttons */
+.sos{ background: linear-gradient(180deg, #ff3b3b, #b30000) !important; box-shadow: 0 0 30px rgba(255,60,60,0.12) !important; }
+.big-btn, .bigbtn { background: linear-gradient(180deg,#333, #1a1a1a) !important; }
+.btn-red{ background: var(--accent-red) !important; }
+.btn-blue{ background: #007aff !important; }
+.btn-orange{ background: var(--accent-orange) !important; }
+
+/* Nav bars */
+.nav, .nav-bar{
+  background: linear-gradient(180deg,#0b0b0b,#121213) !important;
+  border-top: 1px solid rgba(255,255,255,0.03) !important;
+}
+.nav button, .nav-bar button{ background: transparent !important; color: var(--muted) !important; border:none !important; }
+.nav button:hover, .nav-bar button:hover{ color: #fff !important; }
+
+/* Text hints */
+h1,h2,h3,p,div,span{ color: inherit !important; }
+
+/* Specific fixes for files that had white backgrounds */
+#screen1[style], #screen2[style], #screen3[style], #screen4[style]{ background: none !important; }
+
+/* Smaller elements */
+.status-available{ border-color: var(--accent-green) !important; }
+.status-limited{ border-color: var(--accent-orange) !important; }
+.status-full{ border-color: var(--accent-red) !important; opacity:0.95 !important; }
+
+/* Make monospace logs dark */
+#status-feed{ background: rgba(255,255,255,0.02) !important; color: var(--accent-green) !important; }
+
+/* Ensure inputs (if any) are dark */
+input, textarea, select{
+  background: rgba(255,255,255,0.02) !important;
+  color: #e6eef3 !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+/* Reduce bright gradients for hospital/hot screens */
+#screen2, #screen3, #screen4{ background-image: none !important; }
+
+/* Make route and other white blocks dark */
+.route, .hospital, .card{ background: linear-gradient(180deg,#121214,#0f1112) !important; }
+
+/* Small responsive tweaks */
+@media (max-width:600px){ .stats{ flex-direction:column; align-items:center; } }
+
+/* Ultra emergency button (darker red, higher priority) */
+.btn-ultra{
+  background: linear-gradient(180deg,#8b0000,#5c0000) !important;
+  box-shadow: 0 6px 30px rgba(139,0,0,0.35) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+/* Highlight SOS symbol */
+.sos-symbol{ display:inline-block; transform-origin:center; }
+@keyframes sosGlow{
+  0%{ transform: scale(1); filter:drop-shadow(0 0 6px rgba(255,60,60,0.9)); }
+  50%{ transform: scale(1.12); filter:drop-shadow(0 0 18px rgba(255,80,80,0.95)); }
+ 100%{ transform: scale(1); filter:drop-shadow(0 0 6px rgba(255,60,60,0.9)); }
+}
+.sos-symbol{ animation: sosGlow 1s infinite; }
+
+/* Top bar for live time and vehicle number */
+.top-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  z-index:1000;
+}
+/* push content down so top-bar doesn't overlap */
+body{ padding-top:56px !important; }
+
+.top-bar .left{ color: var(--muted); font-weight:600; }
+.top-bar .right{ color: var(--muted); }
+
+/* small Map View toggle placed above centered SOS */
+/* Map toggle removed */
+
+/* lock icon beside railway alert */
+.lock-icon{
+  display:inline-block;
+  margin-right:10px;
+  font-size:18px;
+  vertical-align:middle;
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+.active-rail .lock-icon{ color: var(--accent-green) !important; transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(0,200,120,0.18)); }
+
+.railway-label{ vertical-align:middle; }
+
+

@@ -56,6 +56,7 @@ body{
   color:black;
   text-align:center;
   font-weight:bold;
+  position:relative;
 }
 
 .header{
@@ -167,8 +168,15 @@ body{
 </style>
 </head>
 
+<link rel="stylesheet" href="dark-theme.css">
+
 
 <body>
+
+  <div class="top-bar">
+    <div class="left"><span id="live-time">--:--:--</span></div>
+    <div class="right">Vehicle: <span id="vehicle-no">AMB-001</span></div>
+  </div>
 
 <!-- ================= SCREEN 1 ================= -->
 <div id="screen1" class="screen active">
@@ -183,7 +191,7 @@ body{
   </div>
 
   <!-- HUGE CENTER SOS -->
-  <button class="sos" onclick="go(3)">SOS</button>
+  <button class="sos" onclick="go(3)"><span class="sos-symbol">🚨</span> SOS</button>
 
 </div>
 
@@ -202,9 +210,10 @@ body{
 <div id="screen3" class="screen">
   <h2>🚨 EMERGENCY CONTROLS</h2>
 
-  <button class="bigbtn">Send SOS to Police</button>
-  <button class="bigbtn">Clear Traffic Signals</button>
-  <button class="bigbtn">Open Railway Gate</button>
+  <button class="bigbtn" onclick="triggerAction('POLICE')"><span class="sos-symbol">🚨</span> Send SOS to Police</button>
+  <button class="bigbtn" onclick="triggerAction('TRAFFIC')">Traffic Police alert</button>
+  <button class="bigbtn" onclick="toggleRailway(this)"><span class="lock-icon" data-locked="true">🔒</span> <span class="railway-label">Railway Alert</span></button>
+  <button class="bigbtn btn-ultra" onclick="triggerAction('ULTRA')">Ultra Emergency</button>
 
   <h3>Status: Authorities Notified</h3>
 </div>
@@ -247,6 +256,18 @@ setInterval(()=>{
   document.getElementById('time').innerText=t.toFixed(1);
   document.getElementById('dist').innerText=d.toFixed(2);
 },1000);
+
+/* simple action handler, clock and railway toggle */
+function triggerAction(name){ console.log(name+' triggered'); alert(name+' triggered'); }
+function updateClock(){ const el = document.getElementById('live-time'); if(el) el.innerText = new Date().toLocaleTimeString(); }
+setInterval(updateClock,1000); updateClock(); document.getElementById('vehicle-no').innerText = 'AMB-001';
+
+function toggleRailway(btn){
+  const icon = btn.querySelector('.lock-icon');
+  const locked = icon && icon.getAttribute('data-locked') === 'true';
+  if(locked){ icon.innerText='🔓'; icon.setAttribute('data-locked','false'); btn.classList.add('active-rail'); triggerAction('RAIL_ON'); }
+  else { icon.innerText='🔒'; icon.setAttribute('data-locked','true'); btn.classList.remove('active-rail'); triggerAction('RAIL_OFF'); }
+}
 </script>
 
 </body>
