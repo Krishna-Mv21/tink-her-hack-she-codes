@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Ambulance Navigation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+
+<body>
+
+    <nav class="top-navbar">
+        <a href="/" class="nav-brand">She<span>Codes</span></a>
+        <div class="nav-links">
+            <a href="/user">User Portal</a>
+            <a href="/driver">Driver Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Landing Section -->
+    <section class="landing-section">
+        <h1 class="hero-title gsap-hero" style="font-size: 3.8rem; line-height: 1.1; margin-bottom: 25px;">Precision
+            Routing.<br>Lifesaving Speed.</h1>
+        <p class="hero-subtitle gsap-hero">An advanced emergency dispatch platform engineered to eliminate navigation
+            delays. By bridging real-time traffic tracking with active infrastructure overrides, we ensure critical care
+            arrives exactly when it is needed.</p>
+    </section>
+
+    <!-- Story Section -->
+    <section class="landing-section" style="padding-top:20px; padding-bottom: 60px; min-height: auto;">
+        <div class="clay-panel clay-card gsap-st" style="max-width: 900px; text-align: center; padding: 60px;">
+            <h2 style="font-size: 2.8rem; margin-bottom: 25px; color: #18181b;">Every Second Counts.</h2>
+            <p style="color: #52525b; font-size: 1.25rem; line-height: 1.8;">
+                In critical emergencies, traffic congestion and inaccurate routing cost precious time. Our intelligent
+                Claymorphic dispatch system bridges the gap. By empowering drivers with true real-world OSRM vector
+                tracking and granting them direct overrides to city infrastructure, we guarantee that the route is clear
+                before the siren even wails.
+            </p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="landing-section" style="padding-top:20px; min-height: auto;">
+        <h2 class="hero-title gsap-st" style="font-size: 3rem; margin-bottom: 50px;">System Capabilities</h2>
+
+        <div class="clay-grid">
+            <div class="clay-panel clay-card gsap-st" style="align-items:flex-start; text-align:left;">
+                <h3 style="color:#18181b; font-size:1.5rem; margin-bottom:15px;">🗺️ Advanced Real-Road Routing</h3>
+                <p style="color:#52525b; line-height:1.6;">We've integrated powerful Open Source Routing Machine (OSRM)
+                    algorithms directly into Leaflet to map exact physical streets rather than estimating straight
+                    lines. This brings Google Maps-level accuracy to the dashboard.</p>
+            </div>
+
+            <div class="clay-panel clay-card gsap-st" style="align-items:flex-start; text-align:left;">
+                <h3 style="color:#18181b; font-size:1.5rem; margin-bottom:15px;">🚦 Automated Traffic Overrides</h3>
+                <p style="color:#52525b; line-height:1.6;">Ambulance drivers command the city grid. With a push of a
+                    button, instant alerts drop to local traffic authorities and railway crossings, ensuring traffic
+                    lights turn green ahead of arrival.</p>
+            </div>
+
+            <div class="clay-panel clay-card gsap-st" style="align-items:flex-start; text-align:left;">
+                <h3 style="color:#18181b; font-size:1.5rem; margin-bottom:15px;">⚡ One-Tap S.O.S Precision</h3>
+                <p style="color:#52525b; line-height:1.6;">Patients waste zero time explaining where they are. Using
+                    strict HTML5 Geolocation, the S.O.S beacon instantly fires exact coordinates to the active driver's
+                    portal.</p>
+            </div>
+
+            <div class="clay-panel clay-card gsap-st" style="align-items:flex-start; text-align:left;">
+                <h3 style="color:#18181b; font-size:1.5rem; margin-bottom:15px;">🛡️ Ultra Emergency Protocol</h3>
+                <p style="color:#52525b; line-height:1.6;">For critical transports, the Ultra Mode shifts the entire
+                    console priorities, unlocking immediate deep-system railway blocks to prevent tragic train crossing
+                    delays.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: 80px; padding: 40px 5%; text-align: center; border-top: 4px solid #18181b;">
+        <h3 style="color: #18181b; margin-bottom: 10px; font-weight: 800;">She-Codes</h3>
+        <p style="color: #52525b; font-size: 0.95rem; font-weight: 800;">
+            &copy; <span id="current-year"></span> Smart Ambulance Systems. All Rights Reserved.
+        </p>
+    </footer>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Header
+        gsap.from(".gsap-hero", { y: -30, opacity: 0, duration: 1, stagger: 0.15, ease: "back.out(1.5)" });
+        gsap.from(".gsap-card", { scale: 0.8, opacity: 0, duration: 1, delay: 0.3, stagger: 0.2, ease: "back.out(1.5)" });
+
+        // Scroll Triggers
+        gsap.utils.toArray('.gsap-st').forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+
+</html>

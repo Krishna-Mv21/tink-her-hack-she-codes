@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.O.S Trigger - Smart Ambulance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+
+<body class="landing-section">
+
+    <!-- Clay Navbar -->
+    <nav class="top-navbar">
+        <a href="/" class="nav-brand">She<span>Codes</span></a>
+        <div class="nav-links">
+            <a href="/user" style="color:#18181b;">User Portal</a>
+            <a href="/driver">Driver Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Main SOS View -->
+    <div class="clay-panel" id="main-panel"
+        style="padding: 50px 40px; text-align: center; max-width: 450px; width: 100%;">
+        <h1 class="gsap-item" style="font-size: 2.2rem; margin-bottom: 10px;">Connect Ambulance</h1>
+        <p class="gsap-item" style="color: #52525b; font-size: 1rem; margin-bottom: 40px;">Enter your phone number to
+            arm the system.</p>
+
+        <div class="gsap-item">
+            <input type="tel" id="user-phone" placeholder="Phone Number" class="clay-input" oninput="checkPhoneInput()">
+        </div>
+
+        <div class="gsap-item" style="margin: 50px 0;">
+            <button class="skeuo-sos-btn" id="sos-btn" onclick="triggerUserSOS()" disabled>
+                S.O.S
+            </button>
+        </div>
+
+        <p class="status-message gsap-item" id="status-text"
+            style="color: #52525b; font-weight: 800; text-transform: uppercase;">Awaiting Input</p>
+    </div>
+
+    <!-- Success View -->
+    <div class="clay-panel" id="success-panel"
+        style="display:none; padding: 50px 40px; text-align: center; max-width: 450px; width: 100%;">
+        <div
+            style="font-size: 5rem; margin-bottom: 20px; color: #18181b; filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));">
+            ✓</div>
+        <h1 style="color: #18181b; font-size: 2rem; margin-bottom: 15px;">Broadcast Verified</h1>
+        <p style="color: #52525b; margin-bottom: 40px; line-height: 1.6;">Your coordinates have been securely locked.
+            The nearest ambulance has been deployed.</p>
+
+        <a href="/" class="clay-btn btn-blue" style="text-decoration:none; display:inline-block;">Return Home</a>
+    </div>
+
+    <script>
+        gsap.from(".gsap-item", { scale: 0.9, opacity: 0, duration: 0.6, stagger: 0.1, ease: "back.out(2)" });
+
+        function checkPhoneInput() {
+            const phone = document.getElementById('user-phone').value;
+            const btn = document.getElementById('sos-btn');
+            const status = document.getElementById('status-text');
+
+            if (phone.length >= 5) {
+                btn.disabled = false;
+                status.innerHTML = '<span style="color:#18181b;">System Armed. Press to Fire.</span>';
+                gsap.to(status, { scale: 1.05, repeat: -1, yoyo: true, duration: 0.5 });
+            } else {
+                btn.disabled = true;
+                status.innerHTML = 'Awaiting Input';
+                status.style.color = '#52525b';
+                gsap.killTweensOf(status);
+                gsap.set(status, { scale: 1 });
+            }
+        }
+
+        async function triggerUserSOS() {
+            const phone = document.getElementById('user-phone').value;
+            const statusText = document.getElementById('status-text');
+            const btn = document.getElementById('sos-btn');
+
+            btn.disabled = true;
+            btn.classList.add('btn-pressed');
+
+            statusText.innerHTML = '<span style="color:#52525b;">Acquiring GPS Signal...</span>';
+
+            if (!navigator.geolocation) {
+                statusText.innerHTML = '<span style="color:#18181b;">Geolocation not supported.</span>';
+                btn.classList.remove('btn-pressed');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                statusText.innerHTML = '<span style="color:#18181b;">Broadcasting Coordinates...</span>';
+
+                try {
+                    const response = await fetch('/api/sos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone, lat, lng }) });
+                    const result = await response.json();
+
+                    if (result.success) {
+                        gsap.to("#main-panel", {
+                            opacity: 0, scale: 0.8, duration: 0.4, onComplete: () => {
+                                document.getElementById('main-panel').style.display = 'none';
+                                document.getElementById('success-panel').style.display = 'block';
+                                gsap.from("#success-panel", { opacity: 0, scale: 0.8, duration: 0.6, ease: "back.out(1.5)" });
+                            }
+                        });
+                    } else {
+                        statusText.innerHTML = '<span style="color:#18181b;">Server communication failed.</span>';
+                        btn.classList.remove('btn-pressed'); btn.disabled = false;
+                    }
+                } catch (e) {
+                    statusText.innerHTML = '<span style="color:#18181b;">Network Error.</span>';
+                    btn.classList.remove('btn-pressed'); btn.disabled = false;
+                }
+            }, (error) => {
+                statusText.innerHTML = '<span style="color:#18181b;">GPS access denied.</span>';
+                btn.classList.remove('btn-pressed'); btn.disabled = false;
+            }, { enableHighAccuracy: true, timeout: 10000 });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard - Smart Ambulance</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- Audio Elements -->
+    <audio id="beep-sound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3" preload="auto"></audio>
+    <audio id="long-beep" src="https://www.soundjay.com/buttons/sounds/button-7.mp3" preload="auto" loop></audio>
+</head>
+
+<body class="driver-body">
+
+    <!-- Clay Navbar B&W -->
+    <nav class="top-navbar">
+        <a href="/" class="nav-brand">She<span>Codes</span></a>
+        <div class="nav-links" style="display:flex; align-items:center;">
+            <span id="live-time"
+                style="color: #52525b; font-variant-numeric: tabular-nums; margin-right: 20px; font-weight:800;">--:--:--</span>
+            <span
+                style="background: #e4e4e7; color:#18181b; font-size:0.85rem; padding: 6px 12px; border-radius: 8px; border: 2px solid #18181b; font-weight:900;">AMB-001</span>
+        </div>
+    </nav>
+
+    <div class="driver-layout">
+
+        <!-- Left Sidebar: Routing & Stats -->
+        <aside class="driver-sidebar gsap-slide-left">
+
+            <div class="sidebar-header" id="badge-container">
+                <div class="sidebar-title">System Status</div>
+                <div style="font-size: 1.1rem; color: #52525b; font-weight: 800;">Standby Mode</div>
+            </div>
+
+            <div class="clay-grid" style="grid-template-columns: 1fr 1fr; gap:15px; margin-bottom: 20px;">
+                <div class="clay-stat clay-panel" style="padding: 20px 10px;">
+                    <div
+                        style="font-size: 0.8rem; color: #52525b; font-weight: 800; text-transform:uppercase; margin-bottom:5px;">
+                        ETA</div>
+                    <div class="stat-val" id="eta-val" style="color:#18181b;">--</div>
+                </div>
+                <div class="clay-stat clay-panel" style="padding: 20px 10px;">
+                    <div
+                        style="font-size: 0.8rem; color: #52525b; font-weight: 800; text-transform:uppercase; margin-bottom:5px;">
+                        Distance</div>
+                    <div class="stat-val" id="dist-val" style="color:#18181b;">--</div>
+                </div>
+            </div>
+
+            <div class="sidebar-title">Active Routing</div>
+            <div style="display: flex; flex-direction: column;">
+                <div class="clay-route selected">
+                    <div>
+                        <h4 style="color: #18181b; margin-bottom: 4px; font-weight:900; font-size: 1.1rem;">Main Route
+                        </h4>
+                        <p style="font-size: 0.85rem; color: #52525b; font-weight:700;">OSRM Live Road Navigation</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Side: Map & Bottom Dock -->
+        <main class="map-workspace gsap-fade" style="position:relative;">
+            <div id="map"></div>
+
+            <!-- Traffic Layer Legend (shown when traffic is ON) -->
+            <div id="traffic-legend" style="
+                display:none;
+                position:absolute;
+                bottom:90px;
+                right:20px;
+                background:#fff;
+                border: 2px solid #18181b;
+                border-radius:12px;
+                padding:12px 16px;
+                z-index:999;
+                box-shadow: 3px 3px 0 #18181b;
+            ">
+                <div
+                    style="font-size:0.78rem; font-weight:900; text-transform:uppercase; margin-bottom:8px; color:#18181b; letter-spacing:0.05em;">
+                    Traffic Flow</div>
+                <div
+                    style="display:flex; flex-direction:column; gap:6px; font-size:0.78rem; font-weight:700; color:#18181b;">
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;background:#00aa00;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Free
+                        Flow</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;background:#ff8800;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Slow
+                        Traffic</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;background:#cc0000;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Congested</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;background:#660000;border-radius:50%;margin-right:6px;vertical-align:middle;"></span>Standstill</span>
+                </div>
+                <div style="margin-top:8px; font-size:0.7rem; color:#52525b; font-weight:700;">Powered by TomTom</div>
+            </div>
+
+            <!-- Bottom Control Dock -->
+            <div class="bottom-control-dock">
+                <button class="dock-btn" id="btn-police" onclick="triggerSOS()">
+                    <div class="indicator-light" id="ind-police"></div>
+                    <span style="font-size:1.2rem;">🚓</span> Notify Police
+                </button>
+
+                <button class="dock-btn" id="btn-railway" onclick="toggleRailway()" disabled style="opacity:0.5;">
+                    <div class="indicator-light" id="ind-rail"></div>
+                    <span id="rail-lock">🔒</span> Railway Override
+                </button>
+
+                <button class="dock-btn" id="btn-traffic" onclick="toggleTrafficLayer()"
+                    title="Toggle real-time TomTom traffic data">
+                    <div class="indicator-light" id="ind-traffic"></div>
+                    <span style="font-size:1.2rem;">🚦</span> Traffic Layer
+                </button>
+
+                <button class="dock-btn btn-ultra" onclick="triggerUltra()"
+                    style="background:#18181b; color:#fff; text-shadow:none;">
+                    <span style="font-size:1.2rem;">⚠️</span> ULTRA EMER.
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script>
+        gsap.from(".top-navbar", { y: -20, opacity: 0, duration: 0.8, ease: "power2.out" });
+        gsap.from(".gsap-slide-left", { x: -50, opacity: 0, duration: 0.8, delay: 0.2, ease: "power2.out" });
+        gsap.from(".gsap-fade", { opacity: 0, duration: 1, delay: 0.4 });
+
+        function updateClock() { document.getElementById('live-time').innerText = new Date().toLocaleTimeString('en-US', { hour12: false }); }
+        setInterval(updateClock, 1000); updateClock();
+
+        // TomTom API Key (injected by Flask from .env)
+        const TOMTOM_API_KEY = "{{ tomtom_api_key }}";
+
+        // ---------------- LEAFLET MAP (SKETCH B&W THEME) ---------------- //
+        const map = L.map('map', { zoomControl: false }).setView([10.8505, 76.2711], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CartoDB & OSRM'
+        }).addTo(map);
+
+        // Custom Routing CSS Override
+        const style = document.createElement('style');
+        style.innerHTML = `.leaflet-routing-container { display: none !important; }`;
+        document.head.appendChild(style);
+
+        // ---------------- CUSTOM PANE FOR TOMTOM (exempts it from grayscale) ---------------- //
+        // The base tile pane has grayscale(100%) in CSS for the sketch look.
+        // We create a separate pane with class "leaflet-traffic-pane" which is
+        // explicitly excluded from that filter, so traffic colours stay vivid.
+        map.createPane('trafficPane');
+        const trafficPaneEl = map.getPane('trafficPane');
+        trafficPaneEl.style.zIndex = 250;          // above tiles (200), below overlays (400)
+        trafficPaneEl.classList.add('leaflet-traffic-pane');  // matched by CSS rule
+
+        // ---------------- TOMTOM TRAFFIC FLOW LAYER ---------------- //
+        let trafficLayer = null;
+        let trafficLayerActive = false;
+
+        function toggleTrafficLayer() {
+            const btn = document.getElementById('btn-traffic');
+            const ind = document.getElementById('ind-traffic');
+            const legend = document.getElementById('traffic-legend');
+
+            if (!trafficLayerActive) {
+                // Build the layer on first use — assign to the colour-safe pane
+                if (!trafficLayer) {
+                    trafficLayer = L.tileLayer(
+                        `https://api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=${TOMTOM_API_KEY}`,
+                        {
+                            pane: 'trafficPane',
+                            maxZoom: 22,
+                            opacity: 0.85,
+                            attribution: '&copy; <a href="https://www.tomtom.com" target="_blank">TomTom</a>'
+                        }
+                    );
+                }
+                trafficLayer.addTo(map);
+                trafficLayerActive = true;
+                ind.classList.add('on-yellow');
+                btn.innerHTML = `<div class="indicator-light on-yellow" id="ind-traffic"></div><span style="font-size:1.2rem;">🚦</span> Traffic ON`;
+                legend.style.display = 'block';
+                gsap.from('#traffic-legend', { opacity: 0, y: 10, duration: 0.3 });
+            } else {
+                map.removeLayer(trafficLayer);
+                trafficLayerActive = false;
+                ind.classList.remove('on-yellow');
+                btn.innerHTML = `<div class="indicator-light" id="ind-traffic"></div><span style="font-size:1.2rem;">🚦</span> Traffic Layer`;
+                legend.style.display = 'none';
+            }
+        }
+
+        // ---------------- BACKEND POLLING ---------------- //
+        let driverMarker = null;
+        let patientMarker = null;
+        let routeControl = null;
+
+        async function fetchEmergency() {
+            try {
+                const res = await fetch('/api/location');
+                const data = await res.json();
+                const emergencies = Object.values(data.emergencies);
+
+                if (emergencies.length > 0) {
+                    const latest = emergencies[emergencies.length - 1];
+                    const pLat = parseFloat(latest.lat);
+                    const pLng = parseFloat(latest.lng);
+                    const patientPos = L.latLng(pLat, pLng);
+
+                    document.getElementById('badge-container').innerHTML = `
+                        <div class="sidebar-title" style="color:#18181b;">System Status</div>
+                        <div style="font-weight:900; font-size:1.2rem; color:#18181b; display:flex; align-items:center; gap:8px;">
+                            <div style="width:12px; height:12px; background:#18181b; border-radius:50%;"></div> ACTIVE NAV
+                        </div>
+                    `;
+
+                    if (!patientMarker) {
+                        // Dynamically spawn the ambulance within ~5km from the patient
+                        let randomLatOffset = (Math.random() - 0.5) * 0.06;
+                        let randomLngOffset = (Math.random() - 0.5) * 0.06;
+                        let initialDriverPos = L.latLng(pLat + randomLatOffset, pLng + randomLngOffset);
+
+                        map.setView(patientPos, 13);
+                        driverMarker = L.circleMarker(initialDriverPos, { color: '#18181b', radius: 8, fillOpacity: 1, weight: 3 }).addTo(map);
+
+                        const svgIcon = L.divIcon({
+                            className: 'custom-div-icon',
+                            html: `<div style="background-color:#18181b; width:18px; height:18px; border-radius:50%; box-shadow: 0 0 10px rgba(0,0,0,0.5); border: 3px solid white;"></div>`,
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        });
+
+                        patientMarker = L.marker(patientPos, { icon: svgIcon }).addTo(map);
+                        patientMarker.bindPopup("<b style='color:#18181b; font-weight:900;'>PATIENT</b>").openPopup();
+
+                        // OSRM routing
+                        routeControl = L.Routing.control({
+                            waypoints: [initialDriverPos, patientPos],
+                            routeWhileDragging: false,
+                            addWaypoints: false,
+                            fitSelectedRoutes: true,
+                            show: false,
+                            lineOptions: {
+                                styles: [{ color: '#18181b', opacity: 0.9, weight: 6, dashArray: '10, 10' }]
+                            }
+                        }).addTo(map);
+
+                        routeControl.on('routesfound', function (e) {
+                            var routes = e.routes;
+                            var summary = routes[0].summary;
+                            let totalTimeMinutes = Math.round(summary.totalTime / 60);
+                            let totalDistKm = (summary.totalDistance / 1000).toFixed(1);
+
+                            document.getElementById('eta-val').innerText = totalTimeMinutes + 'm';
+                            document.getElementById('dist-val').innerText = totalDistKm + 'km';
+
+                            simulateDrivingAlongRoute(routes[0].coordinates);
+                        });
+                    } else {
+                        patientMarker.setLatLng(patientPos);
+                        if (routeControl) {
+                            routeControl.spliceWaypoints(routeControl.getWaypoints().length - 1, 1, patientPos);
+                        }
+                    }
+                }
+            } catch (e) { }
+        }
+        setInterval(fetchEmergency, 3000);
+
+        // ---------------- DRIVING SIMULATION ---------------- //
+        let driveIndex = 0; let driveInterval;
+        function simulateDrivingAlongRoute(coordinates) {
+            if (driveInterval) clearInterval(driveInterval);
+            driveInterval = setInterval(() => {
+                if (driveIndex < coordinates.length) {
+                    let nextPos = coordinates[driveIndex];
+                    driverMarker.setLatLng([nextPos.lat, nextPos.lng]);
+                    driveIndex += 2;
+                } else {
+                    clearInterval(driveInterval);
+                }
+            }, 300);
+        }
+
+        // ---------------- AUDIO & OVERRIDE LOGIC ---------------- //
+        const beep = document.getElementById('beep-sound');
+        const longBeep = document.getElementById('long-beep');
+        let ultraActive = false;
+        let railwayActive = false;
+
+        function triggerSOS() {
+            beep.currentTime = 0;
+            beep.play().catch(e => console.log(e));
+
+            const btn = document.getElementById('btn-police');
+            const ind = document.getElementById('ind-police');
+
+            ind.classList.add('on-red');
+            btn.innerHTML = `<div class="indicator-light on-red" id="ind-police"></div> <span style="font-size:1.2rem;">🚨</span> Police Alerted`;
+
+            gsap.to(btn, { backgroundColor: "#e4e4e7", duration: 0.2, yoyo: true, repeat: 3 });
+        }
+
+        function triggerUltra() {
+            if (ultraActive) return;
+            ultraActive = true;
+
+            const btnUltra = document.querySelector('.btn-ultra');
+            btnUltra.style.background = '#e4e4e7';
+            btnUltra.style.color = '#18181b';
+            btnUltra.innerHTML = '<span>🔥</span> ULTRA PROT. ACTIVE';
+
+            const railBtn = document.getElementById('btn-railway');
+            railBtn.disabled = false;
+            railBtn.style.opacity = '1';
+            document.getElementById('rail-lock').innerText = '🔓';
+
+            gsap.to(".map-workspace", { x: 5, duration: 0.05, yoyo: true, repeat: 8 });
+            toggleRailway();
+        }
+
+        function toggleRailway() {
+            if (!ultraActive) return;
+            const btn = document.getElementById('btn-railway');
+            const ind = document.getElementById('ind-rail');
+            railwayActive = !railwayActive;
+
+            if (railwayActive) {
+                ind.classList.add('on-yellow');
+                btn.innerHTML = `<div class="indicator-light on-yellow" id="ind-rail"></div> <span id="rail-lock">🔓</span> Railway Priority`;
+                longBeep.play().catch(e => console.log(e));
+            } else {
+                ind.classList.remove('on-yellow');
+                btn.innerHTML = `<div class="indicator-light" id="ind-rail"></div> <span id="rail-lock">🔓</span> Railway Override`;
+                longBeep.pause(); longBeep.currentTime = 0;
+            }
+        }
+    </script>
+</body>
+
+</html>

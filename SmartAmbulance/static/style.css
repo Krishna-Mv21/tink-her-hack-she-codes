@@ -1,0 +1,469 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f4f4f5;
+  /* Light sketch paper background */
+  color: #18181b;
+  /* Dark sketch pencil text */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* =========================================
+   CLAYMORPHISM CORE CLASSES (SKETCH B&W)
+========================================= */
+.clay-panel {
+  background: #ffffff;
+  border-radius: 36px;
+  /* Charcoal sketched drop shadow, with bright white insets */
+  box-shadow:
+    15px 15px 30px rgba(0, 0, 0, 0.15),
+    -10px -10px 20px rgba(255, 255, 255, 0.8),
+    inset -6px -6px 12px rgba(0, 0, 0, 0.05),
+    inset 6px 6px 12px rgba(255, 255, 255, 1);
+  border: 3px solid #18181b;
+  /* Strong black sketch outline */
+  transition: all 0.3s ease;
+}
+
+/* Base Clay Button */
+.clay-btn {
+  background: #ffffff;
+  color: #18181b;
+  border: 2px solid #18181b;
+  border-radius: 20px;
+  padding: 15px 30px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow:
+    8px 8px 16px rgba(0, 0, 0, 0.15),
+    -6px -6px 12px rgba(255, 255, 255, 0.8),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.05),
+    inset 3px 3px 6px rgba(255, 255, 255, 1);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.clay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    10px 10px 20px rgba(0, 0, 0, 0.2),
+    -8px -8px 16px rgba(255, 255, 255, 0.9),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.05),
+    inset 3px 3px 6px rgba(255, 255, 255, 1);
+}
+
+.clay-btn:active {
+  transform: translateY(4px);
+  box-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.2),
+    -2px -2px 4px rgba(255, 255, 255, 0.5),
+    inset -5px -5px 10px rgba(0, 0, 0, 0.1),
+    inset 5px 5px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Action Specific Buttons (Grayscale mapped) */
+.btn-blue {
+  background: #e4e4e7;
+  color: #18181b;
+}
+
+.btn-red {
+  background: #18181b;
+  color: #ffffff;
+}
+
+.btn-yellow {
+  background: #a1a1aa;
+  color: #ffffff;
+}
+
+/* =========================================
+   NAVIGATION BAR (CLAY B&W)
+========================================= */
+.top-navbar {
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  right: 20px;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 3px solid #18181b;
+  box-shadow:
+    8px 8px 20px rgba(0, 0, 0, 0.15),
+    -4px -4px 10px rgba(255, 255, 255, 0.8),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.05),
+    inset 2px 2px 5px rgba(255, 255, 255, 1);
+}
+
+.nav-brand {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #18181b;
+  text-decoration: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.nav-brand span {
+  color: #71717a;
+  /* Sketched gray accent */
+}
+
+.nav-links a {
+  color: #52525b;
+  text-decoration: none;
+  margin-left: 30px;
+  font-weight: 800;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #18181b;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================================
+   SKEUOMORPHIC & CLAY ELEMENTS
+========================================= */
+.clay-input {
+  width: 100%;
+  padding: 20px;
+  background: #f4f4f5;
+  /* Engraved paper look */
+  border: 2px dashed #a1a1aa;
+  /* Sketched dotted line */
+  border-radius: 20px;
+  color: #18181b;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-align: center;
+  box-shadow:
+    inset 6px 6px 12px rgba(0, 0, 0, 0.1),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.8),
+    2px 2px 5px rgba(255, 255, 255, 1);
+  transition: 0.3s;
+}
+
+.clay-input:focus {
+  outline: none;
+  border-style: solid;
+  border-color: #18181b;
+  box-shadow:
+    inset 6px 6px 12px rgba(0, 0, 0, 0.15),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.5);
+}
+
+/* Giant Physical SOS Button (Monochrome Skeuo) */
+.skeuo-sos-btn {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 8px solid #18181b;
+  margin: 0 auto;
+  background: linear-gradient(145deg, #ffffff, #e4e4e7);
+  color: #18181b;
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* Thick B&W physical shadow + specular highlights */
+  box-shadow:
+    rgba(0, 0, 0, 0.3) 0px 25px 40px -10px,
+    rgba(255, 255, 255, 0.8) 0px -5px 15px -5px,
+    inset rgba(0, 0, 0, 0.1) 0px -15px 25px -5px,
+    inset rgba(255, 255, 255, 1) 0px 10px 20px -5px;
+
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.skeuo-sos-btn:disabled {
+  background: linear-gradient(145deg, #d4d4d8, #a1a1aa);
+  border-color: #71717a;
+  box-shadow:
+    rgba(0, 0, 0, 0.2) 0px 10px 20px -5px,
+    inset rgba(0, 0, 0, 0.1) 0px -10px 15px -5px,
+    inset rgba(255, 255, 255, 0.5) 0px 5px 10px -5px;
+  color: #52525b;
+  cursor: not-allowed;
+  transform: translateY(5px);
+}
+
+.skeuo-sos-btn:not(:disabled):active,
+.btn-pressed {
+  transform: translateY(15px) scale(0.95);
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 5px 10px -5px,
+    inset rgba(0, 0, 0, 0.3) 0px 10px 20px -5px,
+    inset rgba(255, 255, 255, 0.5) 0px -5px 10px -5px !important;
+  background: linear-gradient(145deg, #e4e4e7, #ffffff);
+}
+
+.skeuo-sos-btn::after {
+  content: '';
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  border-radius: 50%;
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* =========================================
+   SCREENS & LAYOUTS
+========================================= */
+.landing-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 120px 5%;
+  text-align: center;
+  position: relative;
+}
+
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: #52525b;
+  margin-bottom: 60px;
+  max-width: 700px;
+  font-weight: 600;
+}
+
+.clay-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 40px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.clay-card {
+  text-decoration: none;
+  color: #18181b;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.clay-card h2 {
+  margin: 15px 0;
+  font-size: 1.8rem;
+}
+
+.clay-card .icon-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 25px;
+  background: #ffffff;
+  border: 2px solid #18181b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  box-shadow:
+    inset 6px 6px 12px rgba(0, 0, 0, 0.1),
+    inset -6px -6px 12px rgba(255, 255, 255, 0.5);
+}
+
+/* Driver Layout */
+.driver-layout {
+  display: flex;
+  height: 100vh;
+  padding-top: 95px;
+  padding-bottom: 28px;
+  padding-left: 24px;
+  padding-right: 24px;
+  gap: 24px;
+  background: #f4f4f5;
+}
+
+.driver-sidebar {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px 18px;
+  background: #f4f4f5;
+  border-radius: 28px;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #52525b;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.clay-stat {
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.stat-val {
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.clay-route {
+  padding: 24px 20px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  box-shadow:
+    6px 6px 12px rgba(0, 0, 0, 0.1),
+    -4px -4px 8px rgba(255, 255, 255, 0.8),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.05),
+    inset 2px 2px 4px rgba(255, 255, 255, 1);
+}
+
+.clay-route.selected {
+  border: 3px solid #18181b;
+  background: #f4f4f5;
+  box-shadow:
+    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Map specific tweaks to fit clay style */
+.map-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow:
+    inset 10px 10px 20px rgba(0, 0, 0, 0.2),
+    inset -5px -5px 10px rgba(255, 255, 255, 0.8);
+  border: 4px solid #18181b;
+  position: relative;
+  background: #e4e4e7;
+}
+
+#map {
+  flex: 1;
+  background: #e4e4e7;
+  /* Grayscale is applied only to the base tile pane, not traffic overlay */
+}
+
+/* Base map tiles → monochrome sketch look */
+.leaflet-tile-pane {
+  filter: grayscale(100%) contrast(1.1);
+}
+
+/* TomTom traffic pane → full colour so flow colours are clearly visible */
+.leaflet-traffic-pane {
+  filter: none !important;
+}
+
+.bottom-control-dock {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  gap: 20px;
+  z-index: 1000;
+  justify-content: center;
+}
+
+.dock-btn {
+  font-size: 1.2rem;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 3px solid #18181b;
+  color: #18181b;
+  font-weight: 800;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.8);
+  /* Stark sketch shadow */
+  transition: 0.1s;
+}
+
+.dock-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.8);
+}
+
+.indicator-light {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #18181b;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2);
+  margin-right: 10px;
+}
+
+.indicator-light.on-red {
+  background: #18181b;
+  /* Black active light */
+  box-shadow: 0 0 10px #18181b;
+}
+
+.indicator-light.on-yellow {
+  background: #52525b;
+  /* Gray active light */
+  box-shadow: 0 0 10px #52525b;
+}
+
+/* Remove bulky leaflet text */
+.leaflet-routing-container {
+  display: none !important;
+}
+
+.leaflet-container {
+  background: #e4e4e7 !important;
+  font-family: 'Nunito';
+}
+
+footer {
+  border-top: 4px solid #18181b !important;
+}
