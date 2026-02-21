@@ -109,13 +109,13 @@ List the key features of your project:
 
 #### Screenshots (Add at least 3)
 
-![Screenshot1](Add screenshot 1 here with proper name)
+![![alt text](image.png)](Screenshot of Home page)
 *Add caption explaining what this shows*
 
-![Screenshot2](Add screenshot 2 here with proper name)
+![![alt text](image-1.png)](Screenshot of User Portal)
 *Add caption explaining what this shows*
 
-![Screenshot3](Add screenshot 3 here with proper name)
+![![alt text](image-2.png)](Screenshot of Driver Portal)
 *Add caption explaining what this shows*
 
 #### Diagrams
