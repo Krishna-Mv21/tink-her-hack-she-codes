@@ -21,7 +21,7 @@
     <!-- Clay Navbar B&W -->
     <nav class="top-navbar">
         <a href="/" class="nav-brand">She<span>Codes</span></a>
-        <div class="nav-links" style="display:flex; align-items:center;">
+        <div class="nav-links navbar-controls">
             <span id="live-time"
                 style="color: #52525b; font-variant-numeric: tabular-nums; margin-right: 20px; font-weight:800;">--:--:--</span>
             <span
@@ -39,14 +39,14 @@
                 <div style="font-size: 1.1rem; color: #52525b; font-weight: 800;">Standby Mode</div>
             </div>
 
-            <div class="clay-grid" style="grid-template-columns: 1fr 1fr; gap:15px; margin-bottom: 20px;">
-                <div class="clay-stat clay-panel" style="padding: 20px 10px;">
+            <div class="clay-grid sidebar-stats">
+                <div class="clay-stat clay-panel stat-box">
                     <div
                         style="font-size: 0.8rem; color: #52525b; font-weight: 800; text-transform:uppercase; margin-bottom:5px;">
                         ETA</div>
                     <div class="stat-val" id="eta-val" style="color:#18181b;">--</div>
                 </div>
-                <div class="clay-stat clay-panel" style="padding: 20px 10px;">
+                <div class="clay-stat clay-panel stat-box">
                     <div
                         style="font-size: 0.8rem; color: #52525b; font-weight: 800; text-transform:uppercase; margin-bottom:5px;">
                         Distance</div>
@@ -67,22 +67,11 @@
         </aside>
 
         <!-- Right Side: Map & Bottom Dock -->
-        <main class="map-workspace gsap-fade" style="position:relative;">
+        <main class="map-workspace gsap-fade">
             <div id="map"></div>
 
             <!-- Traffic Layer Legend (shown when traffic is ON) -->
-            <div id="traffic-legend" style="
-                display:none;
-                position:absolute;
-                bottom:90px;
-                right:20px;
-                background:#fff;
-                border: 2px solid #18181b;
-                border-radius:12px;
-                padding:12px 16px;
-                z-index:999;
-                box-shadow: 3px 3px 0 #18181b;
-            ">
+            <div id="traffic-legend" class="traffic-legend-panel">
                 <div
                     style="font-size:0.78rem; font-weight:900; text-transform:uppercase; margin-bottom:8px; color:#18181b; letter-spacing:0.05em;">
                     Traffic Flow</div>

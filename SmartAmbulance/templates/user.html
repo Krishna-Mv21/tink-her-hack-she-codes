@@ -21,8 +21,7 @@
     </nav>
 
     <!-- Main SOS View -->
-    <div class="clay-panel" id="main-panel"
-        style="padding: 50px 40px; text-align: center; max-width: 450px; width: 100%;">
+    <div class="clay-panel responsive-panel" id="main-panel">
         <h1 class="gsap-item" style="font-size: 2.2rem; margin-bottom: 10px;">Connect Ambulance</h1>
         <p class="gsap-item" style="color: #52525b; font-size: 1rem; margin-bottom: 40px;">Enter your phone number to
             arm the system.</p>
@@ -31,7 +30,7 @@
             <input type="tel" id="user-phone" placeholder="Phone Number" class="clay-input" oninput="checkPhoneInput()">
         </div>
 
-        <div class="gsap-item" style="margin: 50px 0;">
+        <div class="gsap-item sos-btn-container">
             <button class="skeuo-sos-btn" id="sos-btn" onclick="triggerUserSOS()" disabled>
                 S.O.S
             </button>
@@ -42,8 +41,7 @@
     </div>
 
     <!-- Success View -->
-    <div class="clay-panel" id="success-panel"
-        style="display:none; padding: 50px 40px; text-align: center; max-width: 450px; width: 100%;">
+    <div class="clay-panel responsive-panel" id="success-panel" style="display:none;">
         <div
             style="font-size: 5rem; margin-bottom: 20px; color: #18181b; filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));">
             ✓</div>
