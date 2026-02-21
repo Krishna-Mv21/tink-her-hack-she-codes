@@ -9,20 +9,19 @@
 ### Team Name: [Name]
 
 ### Team Members
-- Member 1: [Name] - [College]
-- Member 2: [Name] - [College]
+- Member 1: [Krishnapriya MV] - [College of Engineering Attingal]
+- Member 2: [Gayathri Sunil] - [College of Engineering Attingal]
 
 ### Hosted Project Link
-[mention your project hosted link here]
+[https://tink-her-hack-she-codes.onrender.com/]
 
 ### Project Description
-[2-3 lines about what your project does]
-
+[A real time map for ambulance with advanced features designed to reduce ambulance response time and patient reach hospital faster during critical situations such as accidents or medical emergencies]
 ### The Problem statement
-[What problem are you solving?]
+[Ambulance response time is a critical factor in determining patient outcomes during medical emergencies. Delays in ambulance arrival can lead to increased morbidity and mortality. Additionally, traffic congestion and inefficient routing can further exacerbate these delays. ]
 
 ### The Solution
-[How are you solving it?]
+[Our solution is a real-time ambulance tracking system that utilizes advanced features to reduce ambulance response time and improve patient outcomes. The system provides real-time ambulance tracking, traffic-aware routing, and efficient ambulance dispatch to ensure timely medical assistance during critical situations.]
 
 ---
 
@@ -31,10 +30,10 @@
 ### Technologies/Components Used
 
 **For Software:**
-- Languages used: [e.g., JavaScript, Python, Java]
-- Frameworks used: [e.g., React, Django, Spring Boot]
-- Libraries used: [e.g., axios, pandas, JUnit]
-- Tools used: [e.g., VS Code, Git, Docker]
+- Languages used: [e.g., JavaScript, Python, HTML, CSS]
+- Frameworks used: [e.g., Flask]
+- Libraries used: [e.g., Leaflet.js, Chart.js]
+- Tools used: [e.g., VS Code, Git, GitHub,antigravity]
 
 **For Hardware:**
 - Main components: [List main components]
@@ -46,34 +45,46 @@
 ## Features
 
 List the key features of your project:
-- Feature 1: [Description]
-- Feature 2: [Description]
-- Feature 3: [Description]
-- Feature 4: [Description]
+- Feature 1: [Real time ambulance tracking]
+- Feature 2: [Traffic-aware routing]
+- Feature 3: [Efficient ambulance dispatch]
+- Feature 4: [Real time traffic updates]
+- Feature 5: [Real time ambulance tracking]
+]
 
 ---
 
-## Implementation
+  ## Implementation
 
-### For Software:
+  ### For Software:
 
-#### Installation
-```bash
-[Installation commands - e.g., npm install, pip install -r requirements.txt]
-```
+  #### Installation
+  ```bash
+  pip install -r requirements.txt
+  ```
 
-#### Run
-```bash
-[Run commands - e.g., npm start, python app.py]
-```
+  #### Run
+  ```bash
+  python app.py
+  ```
 
-### For Hardware:
+  ### For Hardware:
 
-#### Components Required
-[List all components needed with specifications]
+  #### Components Required
+  - **ESP32 DevKit V1**: Core microcontroller for processing and connectivity.
+  - **NEO-6M GPS Module**: For acquiring real-time location coordinates.
+  - **SIM800L GSM Module**: For transmitting SOS data and emergency alerts.
+  - **Buzzer & LEDs**: For local emergency status indications.
+  - **OLED Display (0.96")**: To show system status and GPS lock information.
+  - **Push Button**: For triggering the physical S.O.S beacon.
+- **Power Supply**: 5V/2A adapter or Li-ion battery with buck converter.
 
 #### Circuit Setup
-[Explain how to set up the circuit]
+1. **GPS Connection**: Connect NEO-6M VCC to 3.3V, GND to GND, TX to ESP32 Pin 16 (RX2), and RX to Pin 17 (TX2).
+2. **GSM Connection**: Connect SIM800L VCC to stable 4V/2A supply, GND to GND, TX to ESP32 Pin 27, and RX to Pin 26.
+3. **SOS Button**: Connect one side of the push button to Pin 4 and the other to GND (using internal pull-up).
+4. **Indicators**: Connect Buzzer to Pin 18 and Status LED to Pin 19 through a 220Ω resistor.
+5. **Display**: Connect OLED SDA to Pin 21 and SCL to Pin 22.
 
 ---
 
