@@ -2,11 +2,11 @@
   <img src="./img.png" alt="Project Banner" width="100%">
 </p>
 
-# [Project Name] 🎯
+# Smart Ambulance Navigation System 🎯
 
 ## Basic Details
 
-### Team Name: [Name]
+### Team Name: She Codes
 
 ### Team Members
 - Member 1: [Krishnapriya MV] - [College of Engineering Attingal]
@@ -26,6 +26,21 @@
 ---
 
 ## Technical Details
+
+## Directory Structure
+
+```text
+.
+├── docs/               # Documentation assets and diagrams
+├── static/             # Frontend assets (CSS, JS, Images)
+├── templates/          # HTML templates
+├── .env                # Environment variables
+├── .gitignore          # Git ignore rules
+├── app.py              # Main Flask application
+├── Procfile            # Deployment configuration
+├── README.md           # Project documentation
+└── requirements.txt     # Python dependencies
+```
 
 ### Technologies/Components Used
 
